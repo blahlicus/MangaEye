@@ -1,0 +1,46 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:MangaEye.ViewModels;assembly=MangaEye"
+        xmlns:local="clr-namespace:MangaEye;assembly=MangaEye"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="MangaEye.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="{Binding Title}"
+        Name="MainWindow"
+        
+        >
+  <Window.Resources>
+    <local:StringToBitmapConverter x:Key="StringToBitmapConverter"/>
+    <local:ImageWidthToHeightConverter x:Key="ImageWidthToHeightConverter"/>
+  </Window.Resources>
+
+  <Design.DataContext>
+    <vm:MainWindowViewModel/>
+  </Design.DataContext>
+
+  <!--<TextBlock Text="{Binding Test}"/>-->
+  <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" VerticalContentAlignment="Stretch" >
+    <ItemsRepeater x:Name="MainScroller" Name="MainScroller" Items="{Binding ImagePaths}" Width="{Binding Width}" VerticalCacheLength="2000">
+      <ItemsRepeater.ItemTemplate>
+        <DataTemplate>
+
+          <StackPanel>
+
+            <Image Stretch="Fill" Width="{Binding #MainScroller.Width}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Source="{Binding Converter={StaticResource StringToBitmapConverter}}">
+              <Image.Height>
+                <MultiBinding Converter="{StaticResource ImageWidthToHeightConverter}">
+                  <Binding RelativeSource="{RelativeSource Self}" Path="Source"/>
+                  <Binding RelativeSource="{RelativeSource Self}" Path="Width"/>
+                </MultiBinding>
+              </Image.Height>
+            </Image>
+
+          </StackPanel>
+        </DataTemplate>
+      </ItemsRepeater.ItemTemplate>
+    </ItemsRepeater>
+  </ScrollViewer>
+
+</Window>
